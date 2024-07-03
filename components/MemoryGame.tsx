@@ -64,9 +64,10 @@ export default function MemoryGame() {
   }, [cards, flipped, solved]);
 
   const handleClick = (index: number) => {
-    if (!flipped.includes(index) && flipped.length < 2) {
-      setFlipped([...flipped, index]);
+    if (!gameStarted || flipped.includes(index) || flipped.length >= 2) {
+      return;
     }
+    setFlipped([...flipped, index]);
   };
 
   const handleStart = () => {
@@ -125,7 +126,7 @@ export default function MemoryGame() {
           Images will hide in {countdown} seconds
         </p>
       )}
-      <p className="mt-3">Score: {score}</p>
+      <p className="mt-3">EdCoins: {score}</p>
       {gameStarted && (
         <button
           onClick={resetGame}

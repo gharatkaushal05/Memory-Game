@@ -88,19 +88,11 @@ export default function MemoryGame() {
 
   return (
     <div className="text-center flex items-center justify-center flex-col">
-      {!gameStarted && (
-        <button
-          onClick={handleStart}
-          className="p-5 bg-slate-500 rounded-xl mb-5"
-        >
-          Start Game
-        </button>
-      )}
       {gameOver && <h2>You WON! Congrats!</h2>}
       <div className="grid grid-cols-4 gap-5 mt-3">
         {cards.map((card, index) => (
           <div
-            className={`bg-slate-200 w-28 h-28 flex justify-center items-center cursor-pointer transition-transform duration-300 ${
+            className={`bg-customYellow w-28 h-28 flex justify-center items-center cursor-pointer transition-transform duration-300  rounded-xl${
               flipped.includes(index) || solved.includes(index) || visible
                 ? "rotate-360"
                 : ""
@@ -126,13 +118,24 @@ export default function MemoryGame() {
           Images will hide in {countdown} seconds
         </p>
       )}
+      <div className="bg-customGray w-[120px] my-8 h-[50px] rounded-xl">
       <p className="mt-3">EdCoins: {score}</p>
+      </div>
+      
       {gameStarted && (
         <button
           onClick={resetGame}
-          className="p-5 bg-slate-500 rounded-xl mt-5"
+          className="p-5 bg-customGray rounded-xl mt-5"
         >
           Restart Game
+        </button>
+      )}
+      {!gameStarted && (
+        <button
+          onClick={handleStart}
+          className="p-5 bg-customGray rounded-xl mt-5"
+        >
+          Start Game
         </button>
       )}
     </div>

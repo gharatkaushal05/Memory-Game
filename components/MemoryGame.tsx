@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const generateDeck = () => {
   const memoryCards = [
@@ -22,29 +23,28 @@ export default function MemoryGame() {
   const [flipped, setFlipped] = useState<number[]>([]);
   const [solved, setSolved] = useState<number[]>([]);
   const [score, setScore] = useState<number>(0);
-  const [visible, setVisible] = useState<boolean>(false); // Initial visibility set to false
-  const [gameStarted, setGameStarted] = useState<boolean>(false); // State for game started
-  const [countdown, setCountdown] = useState<number>(5); // Countdown timer for visibility
+  const [visible, setVisible] = useState<boolean>(false);
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [countdown, setCountdown] = useState<number>(5);
 
   // Effect to toggle visibility and countdown after 5 seconds when gameStarted is true
   useEffect(() => {
     if (gameStarted && visible) {
       const visibilityTimer = setTimeout(() => {
         setVisible(false);
-        setCountdown(5); // Reset countdown after visibility ends
+        setCountdown(5);
       }, 5000);
 
       const countdownInterval = setInterval(() => {
-        setCountdown((prev) => prev - 1); // Update countdown every second
+        setCountdown((prev) => prev - 1);
       }, 1000);
 
-      // Clean up timers on component unmount or visibility change
       return () => {
         clearTimeout(visibilityTimer);
         clearInterval(countdownInterval);
       };
     }
-  }, [gameStarted, visible]); // Run effect when gameStarted or visible changes
+  }, [gameStarted, visible]);
 
   useEffect(() => {
     const checkForMatch = () => {
@@ -71,8 +71,8 @@ export default function MemoryGame() {
   };
 
   const handleStart = () => {
-    setGameStarted(true); // Start the game
-    setVisible(true); // Show cards initially
+    setGameStarted(true);
+    setVisible(true);
   };
 
   const gameOver = solved.length === cards.length;
@@ -82,8 +82,8 @@ export default function MemoryGame() {
     setFlipped([]);
     setSolved([]);
     setScore(0);
-    setVisible(false); // Reset visibility state
-    setGameStarted(false); // Reset game started state
+    setVisible(false);
+    setGameStarted(false);
   };
 
   return (
@@ -91,26 +91,56 @@ export default function MemoryGame() {
       {gameOver && <h2>You WON! Congrats!</h2>}
       <div className="grid grid-cols-4 gap-5 mt-3">
         {cards.map((card, index) => (
-          <div
-            className={`bg-customYellow w-28 h-28 flex justify-center items-center cursor-pointer transition-transform duration-300  rounded-xl${
-              flipped.includes(index) || solved.includes(index) || visible
-                ? "rotate-360"
-                : ""
-            }`}
+          <motion.div
+            className="bg-customYellow w-28 h-28 flex justify-center items-center cursor-pointer rounded-xl relative"
             key={index}
             onClick={() => handleClick(index)}
+            initial={{ rotateY: 0 }}
+            animate={
+              flipped.includes(index) || solved.includes(index) || visible
+                ? { rotateY: 180 }
+                : { rotateY: 0 }
+            }
+            transition={{ duration: 0.6 }}
+            style={{
+              perspective: "1000px",
+              transformStyle: "preserve-3d",
+            }}
           >
-            {flipped.includes(index) || solved.includes(index) || visible ? (
-              <Image
-                src={`/memory-cards/${card}.png`}
-                width={100}
-                height={100}
-                alt="Memory Card"
-              />
-            ) : (
-              "?"
-            )}
-          </div>
+            <div
+              className="absolute w-full h-full flex items-center justify-center backface-hidden"
+              style={{ backfaceVisibility: "hidden" }}
+            >
+              {flipped.includes(index) || solved.includes(index) || visible ? (
+                <Image
+                  src={`/memory-cards/${card}.png`}
+                  width={100}
+                  height={100}
+                  alt="Memory Card"
+                />
+              ) : (
+                <span className="text-3xl font-bold">?</span>
+              )}
+            </div>
+            <div
+              className="absolute w-full h-full flex items-center justify-center"
+              style={{
+                backfaceVisibility: "hidden",
+                transform: "rotateY(180deg)",
+              }}
+            >
+              {flipped.includes(index) || solved.includes(index) || visible ? (
+                <Image
+                  src={`/memory-cards/${card}.png`}
+                  width={100}
+                  height={100}
+                  alt="Memory Card"
+                />
+              ) : (
+                <span className="text-3xl font-bold">?</span>
+              )}
+            </div>
+          </motion.div>
         ))}
       </div>
       {visible && (
@@ -119,9 +149,9 @@ export default function MemoryGame() {
         </p>
       )}
       <div className="bg-customGray w-[120px] my-8 h-[50px] rounded-xl">
-      <p className="mt-3">EdCoins: {score}</p>
+        <p className="mt-3">EdCoins: {score}</p>
       </div>
-      
+
       {gameStarted && (
         <button
           onClick={resetGame}

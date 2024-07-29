@@ -1,3 +1,4 @@
+
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -87,12 +88,12 @@ export default function MemoryGame() {
   };
 
   return (
-    <div className="text-center flex items-center justify-center flex-col">
-      {gameOver && <h2>You WON! Congrats!</h2>}
-      <div className="grid grid-cols-4 gap-5 mt-3">
+    <div className="text-center flex items-center justify-center flex-col p-4 md:p-6 lg:p-8">
+      {gameOver && <h2 className="text-2xl md:text-3xl">You WON! Congrats!</h2>}
+      <div className="grid grid-cols-4 gap-2 sm:gap-4 md:gap-5 mt-3">
         {cards.map((card, index) => (
           <motion.div
-            className="bg-customYellow w-28 h-28 flex justify-center items-center cursor-pointer rounded-xl relative"
+            className="bg-customYellow w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex justify-center items-center cursor-pointer rounded-xl relative"
             key={index}
             onClick={() => handleClick(index)}
             initial={{ rotateY: 0 }}
@@ -114,12 +115,12 @@ export default function MemoryGame() {
               {flipped.includes(index) || solved.includes(index) || visible ? (
                 <Image
                   src={`/memory-cards/${card}.png`}
-                  width={100}
-                  height={100}
+                  width={80}
+                  height={80}
                   alt="Memory Card"
                 />
               ) : (
-                <span className="text-3xl font-bold">?</span>
+                <span className="text-xl sm:text-2xl md:text-3xl font-bold">?</span>
               )}
             </div>
             <div
@@ -132,30 +133,30 @@ export default function MemoryGame() {
               {flipped.includes(index) || solved.includes(index) || visible ? (
                 <Image
                   src={`/memory-cards/${card}.png`}
-                  width={100}
-                  height={100}
+                  width={80}
+                  height={80}
                   alt="Memory Card"
                 />
               ) : (
-                <span className="text-3xl font-bold">?</span>
+                <span className="text-xl sm:text-2xl md:text-3xl font-bold">?</span>
               )}
             </div>
           </motion.div>
         ))}
       </div>
       {visible && (
-        <p className="mt-3">
+        <p className="mt-3 text-sm sm:text-lg md:text-xl">
           Images will hide in {countdown} seconds
         </p>
       )}
-      <div className="bg-customGray w-[120px] my-8 h-[50px] rounded-xl">
-        <p className="mt-3">EdCoins: {score}</p>
+      <div className="bg-customGray w-[80px] sm:w-[100px] md:w-[120px] my-2 sm:my-4 md:my-8 h-[30px] sm:h-[40px] md:h-[50px] rounded-xl">
+        <p className="mt-1 text-xs sm:text-sm md:text-base">EdCoins: {score}</p>
       </div>
 
       {gameStarted && (
         <button
           onClick={resetGame}
-          className="p-5 bg-customGray rounded-xl mt-5"
+          className="p-3 sm:p-4 md:p-5 bg-customGray rounded-xl mt-4 sm:mt-5 md:mt-6"
         >
           Restart Game
         </button>
@@ -163,7 +164,7 @@ export default function MemoryGame() {
       {!gameStarted && (
         <button
           onClick={handleStart}
-          className="p-5 bg-customGray rounded-xl mt-5"
+          className="p-3 sm:p-4 md:p-5 bg-customGray rounded-xl mt-4 sm:mt-5 md:mt-6"
         >
           Start Game
         </button>
@@ -171,3 +172,5 @@ export default function MemoryGame() {
     </div>
   );
 }
+
+

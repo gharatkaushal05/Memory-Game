@@ -28,7 +28,7 @@ export default function MemoryGame() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [countdown, setCountdown] = useState<number>(5);
 
-  // Effect to toggle visibility and countdown after 5 seconds when gameStarted is true
+  
   useEffect(() => {
     if (gameStarted && visible) {
       const visibilityTimer = setTimeout(() => {
